@@ -1,0 +1,33 @@
+let score = 0;
+const scoreDisplay = document.getElementById('score');
+const gameArea = document.getElementById('gameArea');
+const startButton = document.getElementById('startButton');
+
+startButton.addEventListener('click', startGame);
+
+function startGame() {
+    score = 0;
+    scoreDisplay.textContent = score;
+    gameArea.innerHTML = ''; // 초기화
+    createTarget();
+}
+
+function createTarget() {
+    const target = document.createElement('div');
+    target.className = 'target';
+    target.style.width = '30px';
+    target.style.height = '30px';
+    target.style.backgroundColor = 'red';
+    target.style.position = 'absolute';
+    target.style.top = Math.random() * (gameArea.clientHeight - 30) + 'px';
+    target.style.left = Math.random() * (gameArea.clientWidth - 30) + 'px';
+    
+    target.addEventListener('click', () => {
+        score++;
+        scoreDisplay.textContent = score;
+        gameArea.removeChild(target);
+        createTarget();
+    });
+
+    gameArea.appendChild(target);
+}
