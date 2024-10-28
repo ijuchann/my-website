@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리듬 게임</title>
+  <style>
+    body {
+      background-color: #333;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    #gameArea {
+      width: 400px;
+      height: 400px;
+      margin: 50px auto;
+      background-color: #444;
+      position: relative;
+    }
+
+    .note {
+      width: 50px;
+      height: 20px;
+      background-color: #fff;
+      position: absolute;
+    }
+
+    .target {
+      width: 50px;
+      height: 20px;
+      background-color: #008b8b;
+      position: absolute;
+      bottom: 0;
+    }
+
+    #score {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+
+    .lane {
+      position: absolute;
+      top: 0;
+      width: 50px;
+      height: 100%;
+      border-left: 1px solid #555;
+    }
+
+    #restartButton {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>리듬 게임</h1>
+  <div>
+    <label for="speedSlider">노트 속도:</label>
+    <input type="range" id="speedSlider" min="1" max="10" value="5">
+    <span id="speedDisplay">5</span>
+  </div>
+
+  <div id="gameArea">
+    <div class="lane" style="left: 0;"></div>
+    <div class="lane" style="left: 50px;"></div>
+    <div class="lane" style="left: 100px;"></div>
+    <div class="lane" style="left: 150px;"></div>
+    <div class="lane" style="left: 200px;"></div>
+    <div class="lane" style="left: 250px;"></div>
+    <div class="lane" style="left: 300px;"></div>
+    <div class="lane" style="left: 350px;"></div>
+
+    <div class="target" id="target1" style="left: 0;"></div>
+    <div class="target" id="target2" style="left: 50px;"></div>
+    <div class="target" id="target3" style="left: 100px;"></div>
+    <div class="target" id="target4" style="left: 150px;"></div>
+    <div class="target" id="target5" style="left: 200px;"></div>
+    <div class="target" id="target6" style="left: 250px;"></div>
+    <div class="target" id="target7" style="left: 300px;"></div>
+    <div class="target" id="target8" style="left: 350px;"></div>
+  </div>
+
+  <div id="score">점수: 0</div>
+  <button id="restartButton">다시 시작</button>
+
+  <audio id="backgroundMusic" src="https://example.com/your-song.mp3" loop autoplay></audio>
+
+  <script>
+    const gameArea = document.getElementById('gameArea');
+    const targets = document.querySelectorAll('.target');
+    const scoreDisplay = document.getElementById('score');
+    const restartButton = document.getElementById('restartButton');
+
+    let score = 0;
+    let missedNotes = 0;
+    let noteSpeed = 5;
+    const maxMissedNotes = 5;
+    let noteTiming = [
+      { lane: 0, timing: 500 },
+      { lane: 1, timing: 1000 },
+      { lane: 2, timing: 1500 },
+      { lane: 3, timing: 2000 },
+      { lane: 1, timing: 2500 },
+      { lane: 0, timing: 3000 },
+      { lane: 3, timing: 3500 },
+      { lane: 2, timing: 4000 },
+      { lane: 6, timing: 4500 },
+      { lane: 5, timing: 5000 },
+      { lane: 7, timing: 5500 },
+      { lane: 6, timing: 6000 },
+    ];
+    let animationIntervals = [];
+
+    function createNote(lane) {
+      const note = document.createElement('div');
+      note.classList.add('note');
+      note.style.left = targets[lane].offsetLeft + 'px';
+      note.style.top = '0px';
+      gameArea.appendChild(note);
+
+      let noteTop = 0;
+      const animationInterval = setInterval(() => {
+        noteTop += noteSpeed;
+        note.style.top = noteTop + 'px';
+
+        if (noteTop >= gameArea.offsetHeight - note.offsetHeight) {
+          clearInterval(animationInterval);
+          gameArea.removeChild(note);
+          missedNotes++;
+          if (missedNotes >= maxMissedNotes) {
+            gameOver();
+          }
+        }
+      }, 30);
+      animationIntervals.push(animationInterval);
+    }
+
+    noteTiming.forEach((noteInfo) => {
+      setTimeout(() => {
+        createNote(noteInfo.lane);
+      }, noteInfo.timing);
+    });
+
+    window.addEventListener('keydown', (event) => {
+      const keyPressed = event.key;
+      const targetIndex = getTargetIndex(keyPressed);
+      if (targetIndex !== -1) checkHit(targetIndex);
+    });
+
+    gameArea.addEventListener('touchstart', (event) => {
+      const touchX = event.touches[0].clientX;
+      const targetIndex = getTargetIndexByTouch(touchX);
+      if (targetIndex !== -1) checkHit(targetIndex);
+    });
+
+    function getTargetIndex(key) {
+      switch (key) {
+        case 'a': return 0;
+        case 's': return 1;
+        case 'd': return 2;
+        case 'f': return 3;
+        case 'j': return 4;
+        case 'k': return 5;
+        case 'l': return 6;
+        case ';': return 7;
+        default: return -1;
+      }
+    }
+
+    function getTargetIndexByTouch(touchX) {
+      for (let i = 0; i < targets.length; i++) {
+        const target = targets[i].getBoundingClientRect();
+        if (touchX >= target.left && touchX <= target.right) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    function checkHit(targetIndex) {
+      const target = targets[targetIndex];
+      const notes = document.querySelectorAll('.note');
+      for (let note of notes) {
+        const noteRect = note.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        
+        if (noteRect.left < targetRect.right &&
+            noteRect.right > targetRect.left &&
+            noteRect.bottom > targetRect.top &&
+            noteRect.top < targetRect.bottom) {
+          
+          const timingDiff = Math.abs(noteRect.bottom - targetRect.top);
+          if (timingDiff < 20) score += 100;
+          else if (timingDiff < 50) score += 50;
+          else if (timingDiff < 100) score += 20;
+
+          scoreDisplay.textContent = '점수: ' + score;
+          gameArea.removeChild(note);
+          break;
+        }
+      }
+    }
+
+    const speedSlider = document.getElementById('speedSlider');
+    speedSlider.addEventListener('input', () => {
+      noteSpeed = parseInt(speedSlider.value);
+    });
+
+    function resetGame() {
+      score = 0;
+      missedNotes = 0;
+      scoreDisplay.textContent = '점수: 0';
+      gameArea.innerHTML = '';
+      targets.forEach((target) => {
+        gameArea.appendChild(target);
+      });
+      noteTiming.forEach((noteInfo) => {
+        setTimeout(() => {
+          createNote(noteInfo.lane);
+        }, noteInfo.timing);
+      });
+      restartButton.style.display = 'none';
+      document.getElementById('backgroundMusic').play();
+
+      animationIntervals.forEach(interval => clearInterval(interval));
+      animationIntervals = [];
+    }
+
+    function gameOver() {
+      restartButton.style.display = 'block';
+      document.getElementById('backgroundMusic').pause();
+      
+      const gameOverMessage = document.createElement('div');
+      gameOverMessage.textContent = `게임 종료!  최종 점수: ${score}`;
+      gameOverMessage.style.position = 'absolute';
+      gameOverMessage.style.top = '50%';
+      gameOverMessage.style.left = '50%';
+      gameOverMessage.style.transform = 'translate(-50%, -50%)';
+      gameOverMessage.style.fontSize = '30px';
+      gameOverMessage.style.color = '#fff';
+      
+       gameArea.appendChild(gameOverMessage);
+  }
+  restartButton.style.display = 'block';
+  restartButton.addEventListener('click', resetGame);
+</script>
+</body>
+</html>
