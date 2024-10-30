@@ -16,3 +16,6 @@ document.getElementById('uploadForm').addEventListener('submit', function (event
         fileInput.value = '';
     }
 });
+document.getElementById('openGameButton').addEventListener('click', function() {
+    window.open('file:///C:/Users/user/Downloads/rhythm_game.html', '_blank'); // 새 창으로 열 URL을 입력
+});
