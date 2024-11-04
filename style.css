@@ -43,3 +43,9 @@ li {
     padding: 10px;
     border: 1px solid #ddd;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* 요소의 크기 계산을 더 쉽게 해줌 */
+}
