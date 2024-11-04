@@ -13,6 +13,7 @@ header {
     display: flex; /* 플렉스 박스 사용 */
     justify-content: center; /* 수평 중앙 정렬 */
     align-items: center; /* 수직 중앙 정렬 */
+    width: 100%;
 }
 
 h2 {
