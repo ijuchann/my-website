@@ -6,19 +6,38 @@ document.getElementById('uploadForm').addEventListener('submit', function (event
 
     if (file) {
         const listItem = document.createElement('li');
-        listItem.textContent = file.name;
-        document.getElementById('gameList').appendChild(listItem);
         
-        // 파일 업로드 처리 (여기서는 실제 파일 업로드 기능이 필요)
-        // 예: 서버에 파일을 POST 요청으로 전송하는 코드가 필요합니다.
+        // 링크 생성
+        const link = document.createElement('a');
+        link.textContent = file.name;
+        link.href = URL.createObjectURL(file); // 업로드된 파일에 대한 URL 생성
+        link.target = '_blank'; // 새 창에서 열기
+        link.onclick = function() {
+            setTimeout(() => URL.revokeObjectURL(link.href), 100); // 메모리 해제
+        };
+        
+        listItem.appendChild(link);
+        document.getElementById('gameList').appendChild(listItem);
         
         // 파일 입력 초기화
         fileInput.value = '';
     }
 });
+
 document.getElementById('openGameButton').addEventListener('click', function() {
-    window.open('file:///C:/Users/user/Downloads/rhythm_game.html', '_blank'); // 새 창으로 열 URL을 입력
+    window.open('file:///C:/Users/user/Downloads/rhythm_game.html', '_blank'); // 게임 파일 열기
 });
+
+const searchInput = document.getElementById('searchInput');
+const gameList = document.getElementById('gameList');
+
+searchInput.addEventListener('input', function() {
+    updateGameList(); // 검색할 때마다 목록 업데이트
+});
+
+function updateGameList() {
+    // 현재는 직접적으로 업데이트하는 로직이 없음
+}
 
 const uploadForm = document.getElementById('uploadForm');
 const gameFileInput = document.getElementById('gameFile');
