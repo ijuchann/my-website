@@ -25,7 +25,7 @@ document.getElementById('uploadForm').addEventListener('submit', function (event
 });
 
 document.getElementById('openGameButton').addEventListener('click', function() {
-    window.open('file:///C:/Users/user/Downloads/rhythm_game.html', '_blank'); // 게임 파일 열기
+    window.open('https://ijuchann.github.io/rhythm_game/', '_blank'); // 게임 파일 열기
 });
 
 const searchInput = document.getElementById('searchInput');
