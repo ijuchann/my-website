@@ -25,14 +25,20 @@ const gameFileInput = document.getElementById('gameFile');
 const gameList = document.getElementById('gameList');
 const searchInput = document.getElementById('searchInput'); // 검색 입력 필드
 
-let games = []; // 업로드된 게임 목록을 저장하는 배열
+let games = [
+    { name: rhythm_game.html' }, // 미리 설정된 게임 파일 이름
+    { name: '예제게임2.html' },
+    { name: '예제게임3.html' }
+]; // 업로드된 게임 목록을 저장하는 배열
+
+// 페이지가 로드될 때 미리 설정된 게임 목록을 표시
+updateGameList();
 
 uploadForm.addEventListener('submit', function(event) {
     event.preventDefault(); // 폼 제출 방지
 
     const file = gameFileInput.files[0]; // 선택한 파일
     if (file) {
-        const fileName = file.name; // 파일 이름
         games.push(file); // 배열에 게임 파일 추가
         gameFileInput.value = ''; // 입력 필드 초기화
         updateGameList(); // 목록 업데이트
@@ -56,7 +62,7 @@ function updateGameList() {
 
         // 클릭 시 파일을 열 수 있도록 링크 추가
         li.addEventListener('click', function() {
-            const url = URL.createObjectURL(game); // Blob URL 생성
+            const url = URL.createObjectURL(new Blob([game.name], { type: 'text/html' })); // Blob URL 생성
             window.open(url, '_blank'); // 새 창으로 열기
         });
 
