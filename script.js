@@ -27,7 +27,7 @@ const searchInput = document.getElementById('searchInput'); // 검색 입력 필
 
 let games = [
     // 미리 설정된 게임 파일 이름 (실제 파일 경로에 맞게 수정 필요)
-    { name: '예제게임1.html' }, 
+    { name: 'https://ijuchann.github.io/rhythm_game/' }, 
     { name: '예제게임2.html' },
     { name: '예제게임3.html' }
 ]; // 업로드된 게임 목록을 저장하는 배열
