@@ -23,17 +23,19 @@ document.getElementById('openGameButton').addEventListener('click', function() {
 const uploadForm = document.getElementById('uploadForm');
 const gameFileInput = document.getElementById('gameFile');
 const gameList = document.getElementById('gameList');
-const searchInput = document.getElementById('searchInput');
+const searchInput = document.getElementById('searchInput'); // 검색 입력 필드 (HTML에서 추가 필요)
 
 let games = []; // 업로드된 게임 목록을 저장하는 배열
 
 uploadForm.addEventListener('submit', function(event) {
     event.preventDefault(); // 폼 제출 방지
 
-    const fileName = gameFileInput.files[0].name; // 선택한 파일 이름
-    games.push(fileName); // 배열에 게임 추가
-    gameFileInput.value = ''; // 입력 필드 초기화
-    updateGameList(); // 목록 업데이트
+    const file = gameFileInput.files[0]; // 선택한 파일
+    if (file) {
+        games.push(file.name); // 배열에 게임 이름 추가
+        gameFileInput.value = ''; // 입력 필드 초기화
+        updateGameList(); // 목록 업데이트
+    }
 });
 
 searchInput.addEventListener('input', function() {
@@ -53,3 +55,8 @@ function updateGameList() {
         gameList.appendChild(li); // 목록에 항목 추가
     });
 }
+
+// 게임 열기 버튼 이벤트 리스너
+document.getElementById('openGameButton').addEventListener('click', function() {
+    window.open('file:///C:/Users/user/Downloads/rhythm_game.html', '_blank'); // 새 창으로 열 URL을 입력
+});
