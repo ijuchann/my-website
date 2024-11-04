@@ -26,7 +26,8 @@ const gameList = document.getElementById('gameList');
 const searchInput = document.getElementById('searchInput'); // 검색 입력 필드
 
 let games = [
-    { name: rhythm_game.html' }, // 미리 설정된 게임 파일 이름
+    // 미리 설정된 게임 파일 이름 (실제 파일 경로에 맞게 수정 필요)
+    { name: '예제게임1.html' }, 
     { name: '예제게임2.html' },
     { name: '예제게임3.html' }
 ]; // 업로드된 게임 목록을 저장하는 배열
@@ -58,14 +59,17 @@ function updateGameList() {
 
     filteredGames.forEach(game => {
         const li = document.createElement('li');
-        li.textContent = game.name; // 게임 이름 추가
-
-        // 클릭 시 파일을 열 수 있도록 링크 추가
-        li.addEventListener('click', function() {
+        
+        // 게임 이름을 클릭 가능한 링크로 추가
+        const link = document.createElement('a');
+        link.textContent = game.name; // 게임 이름 추가
+        link.href = '#'; // 기본 링크는 #로 설정
+        link.addEventListener('click', function() {
             const url = URL.createObjectURL(new Blob([game.name], { type: 'text/html' })); // Blob URL 생성
             window.open(url, '_blank'); // 새 창으로 열기
         });
-
+        
+        li.appendChild(link); // 링크를 리스트 아이템에 추가
         gameList.appendChild(li); // 목록에 항목 추가
     });
 }
