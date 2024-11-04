@@ -50,3 +50,12 @@ li {
     width: 100%; /* 전체 너비 차지 */
     box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
 }
+
+a {
+    text-decoration: none;
+    color: #007BFF; /* 링크 색상 */
+}
+
+a:hover {
+    text-decoration: underline; /* 링크에 마우스 오버 효과 */
+}
