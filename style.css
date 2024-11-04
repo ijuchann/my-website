@@ -44,8 +44,9 @@ li {
     border: 1px solid #ddd;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* 요소의 크기 계산을 더 쉽게 해줌 */
+#searchInput {
+    margin: 10px 0;
+    padding: 5px;
+    width: 100%; /* 전체 너비 차지 */
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
 }
