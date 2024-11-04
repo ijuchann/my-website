@@ -23,7 +23,7 @@ document.getElementById('openGameButton').addEventListener('click', function() {
 const uploadForm = document.getElementById('uploadForm');
 const gameFileInput = document.getElementById('gameFile');
 const gameList = document.getElementById('gameList');
-const searchInput = document.getElementById('searchInput'); // 검색 입력 필드 (HTML에서 추가 필요)
+const searchInput = document.getElementById('searchInput'); // 검색 입력 필드
 
 let games = []; // 업로드된 게임 목록을 저장하는 배열
 
@@ -32,7 +32,8 @@ uploadForm.addEventListener('submit', function(event) {
 
     const file = gameFileInput.files[0]; // 선택한 파일
     if (file) {
-        games.push(file.name); // 배열에 게임 이름 추가
+        const fileName = file.name; // 파일 이름
+        games.push(file); // 배열에 게임 파일 추가
         gameFileInput.value = ''; // 입력 필드 초기화
         updateGameList(); // 목록 업데이트
     }
@@ -47,11 +48,18 @@ function updateGameList() {
     gameList.innerHTML = ''; // 목록 초기화
 
     // 필터링된 게임 목록 생성
-    const filteredGames = games.filter(game => game.toLowerCase().includes(searchQuery));
+    const filteredGames = games.filter(game => game.name.toLowerCase().includes(searchQuery));
 
     filteredGames.forEach(game => {
         const li = document.createElement('li');
-        li.textContent = game; // 게임 이름 추가
+        li.textContent = game.name; // 게임 이름 추가
+
+        // 클릭 시 파일을 열 수 있도록 링크 추가
+        li.addEventListener('click', function() {
+            const url = URL.createObjectURL(game); // Blob URL 생성
+            window.open(url, '_blank'); // 새 창으로 열기
+        });
+
         gameList.appendChild(li); // 목록에 항목 추가
     });
 }
