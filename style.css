@@ -11,8 +11,6 @@ header {
     padding: 10px 0;
     text-align: center; /* 텍스트 중앙 정렬 */
     display: flex; /* 플렉스 박스 사용 */
-    justify-content: center; /* 수평 중앙 정렬 */
-    align-items: center; /* 수직 중앙 정렬 */
     width: 100%;
 }
 
