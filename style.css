@@ -9,7 +9,6 @@ header {
     background: #333;
     color: #fff;
     padding: 10px 0;
-    text-align: center; /* 텍스트 중앙 정렬 */
     display: flex; /* 플렉스 박스 사용 */
     width: 100%;
 }
@@ -62,6 +61,5 @@ a:hover {
     margin: 10px auto; /* 상하 여백, 좌우는 자동으로 가운데 */
     padding: 5px;
     width: 50%; /* 원하는 너비로 설정 */
-    box-sizing: border-box;
     display: block; /* 인풋 요소를 블록 레벨로 설정하여 가운데 정렬 */
 }
